@@ -4,7 +4,8 @@ const express = require("express");
 const https = require("https");
 const app = express();
 const mailchimp = require("@mailchimp/mailchimp_marketing");
-const config = require("./config.js");
+require('dotenv').config();
+const  {MY_API_TOKEN, SECRET_API_KEY } = process.env;
 
 
 app.use(express.urlencoded(
@@ -12,8 +13,7 @@ app.use(express.urlencoded(
 ));//pass information from an html file to a Server using a body parser
 app.use(express.static("public"));
 
-var token = config.MY_API_TOKEN;
-var key = config.SECRET_API_KEY;
+
 
 app.get('/', function (req, res) {
   res.sendFile(__dirname + "/signup.html");
@@ -39,11 +39,11 @@ const data = {
 };
 
 const jsonData = JSON.stringify(data);
-const url = `https://us17.api.mailchimp.com/3.0/lists/${token}`;
+const url = `https://us17.api.mailchimp.com/3.0/lists/${MY_API_TOKEN}`;
 
 const opts = {
     method: "POST",
-    auth: `William:${key}`
+    auth: `William:${SECRET_API_KEY}`
 };
 
 const request = https.request(url, opts, function (response) {
