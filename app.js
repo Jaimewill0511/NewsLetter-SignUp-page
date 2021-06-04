@@ -4,6 +4,7 @@ const express = require("express");
 const https = require("https");
 const app = express();
 const mailchimp = require("@mailchimp/mailchimp_marketing");
+const config = require("./config.js");
 
 
 app.use(express.urlencoded(
@@ -11,7 +12,8 @@ app.use(express.urlencoded(
 ));//pass information from an html file to a Server using a body parser
 app.use(express.static("public"));
 
-
+var token = config.MY_API_TOKEN;
+var key = config.SECRET_API_KEY;
 
 app.get('/', function (req, res) {
   res.sendFile(__dirname + "/signup.html");
@@ -37,11 +39,11 @@ const data = {
 };
 
 const jsonData = JSON.stringify(data);
-const url = "https://us17.api.mailchimp.com/3.0/lists/0dbbca103a";
+const url = `https://us17.api.mailchimp.com/3.0/lists/${token}`;
 
 const opts = {
     method: "POST",
-    auth: "William:fa70539e7e7a2605893a0fd8e61137bc-us17"
+    auth: `William:${key}`
 };
 
 const request = https.request(url, opts, function (response) {
@@ -74,6 +76,6 @@ app.listen(process.env.PORT  || 3000 , function () {
   console.log("The Server has started on port 3000");
 });
 
-//  api key fa70539e7e7a2605893a0fd8e61137bc-us17
 
-// unique id 0dbbca103a
+
+
